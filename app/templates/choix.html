@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Choisissez une action</title>
+  <style>
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    text-align: center;
+    background-image: url("/static/images/DSCF5645.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    backdrop-filter: brightness(0.8);
+  }
+
+  .logo {
+    width: 150px;
+    max-width: 80%;
+    margin: 20px auto 10px;
+    display: block;
+  }
+
+  h2 {
+    color: white;
+    text-shadow: 1px 1px 3px black;
+  }
+
+  .btn {
+    display: block;
+    width: 250px;
+    margin: 15px auto;
+    padding: 15px;
+    background-color: #C75B12;
+    color: white;
+    text-decoration: none;
+    border-radius: 10px;
+    font-size: 18px;
+    transition: background-color 0.3s ease;
+  }
+
+  .btn:hover {
+    background-color: #a84d0f; /* version un peu plus foncée au survol */
+  }
+</style>
+
+</head>
+<body>
+
+  <img src="/static/images/AZALOTEL-ABIDJAN-01.jpg" alt="Logo Hôtel" class="logo">
+
+  <h2>Bienvenue ! Que souhaitez-vous faire ?</h2>
+
+  <a href="{{ url_for('client.formulaire_resident', code_uuid=code_uuid) }}" class="btn">Guest</a>
+  <a href="{{ url_for('client.formulaire_event', code_uuid=code_uuid) }}"  class="btn" target="_blank">Event</a>
+  <a href="https://to/hotel" class="btn" target="_blank">Restaurant</a>
+
+</body>
+</html>

@@ -1,0 +1,454 @@
+/********************************CSS DASHBOARD (Palette Azalaï)*****************************************/
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #F5E9DA; /* beige clair Azalaï */
+  margin: 0;
+  padding: 20px;
+  color: #1C1C1C; /* noir doux */
+}
+
+.dashboard-container {
+  max-width: 1200px;
+  margin: auto;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #C75B12;
+  font-weight: 600;
+}
+
+.filters {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.filters select,
+.filters input[type="date"],
+.filters button {
+  padding: 10px 15px;
+  font-size: 16px;
+  border: 1px solid #d9c4b0;
+  border-radius: 6px;
+  background-color: #fffaf5;
+}
+
+.filters button {
+  background-color: #C75B12;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border: none;
+}
+
+.filters button:hover {
+  background-color: #a84d0f;
+}
+
+.card-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.card {
+  background-color: white;
+  border-left: 6px solid #C75B12;
+  padding: 20px;
+  flex: 1;
+  min-width: 200px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  text-align: center;
+  font-size: 18px;
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+}
+
+.card span {
+  display: block;
+  font-size: 30px;
+  font-weight: bold;
+  margin-top: 8px;
+  color: #C75B12;
+}
+
+.charts {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 30px;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.chart-box {
+  flex: 1;
+  min-width: 300px;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  text-align: center;
+}
+
+.chart-box canvas {
+  max-height: 300px;
+}
+
+.response-section {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  margin-bottom: 20px;
+}
+
+.response-section ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.response-section li {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  color: #333;
+}
+
+.response-section li:last-child {
+  border-bottom: none;
+}
+
+.loading {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+  font-size: 18px;
+}
+
+.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 15px;
+  border-radius: 8px;
+  margin: 20px 0;
+  border: 1px solid #f5c6cb;
+}
+
+.debug-info {
+  background-color: #d1ecf1;
+  color: #0c5460;
+  padding: 15px;
+  border-radius: 8px;
+  margin: 20px 0;
+  border: 1px solid #bee5eb;
+}
+
+
+
+/********************************************CSS FORM***********************************************/
+
+/* === STYLES GÉNÉRAUX === */
+body {
+    background: linear-gradient(135deg, #F5E9DA 0%, #EAD4BD 100%);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
+    padding: 20px 0;
+}
+
+.container {
+    max-width: 1200px;
+}
+
+.main-container {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    overflow: hidden;
+    margin: 20px auto;
+}
+
+/* === EN-TÊTE === */
+.page-header {
+    background: linear-gradient(135deg, #C75B12 0%, #a84d0f 100%);
+    color: white;
+    padding: 30px;
+    text-align: center;
+}
+
+.page-header h1 {
+    margin: 0;
+    font-size: 2.5rem;
+    font-weight: 300;
+}
+
+.page-header i {
+    margin-right: 15px;
+    font-size: 2rem;
+}
+
+/* === CARTES DE SECTION === */
+.section-card {
+    background: white;
+    margin: 20px;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    border-left: 4px solid #C75B12;
+    transition: all 0.3s ease;
+}
+
+.section-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    margin-bottom: 25px;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #1C1C1C;
+}
+
+.section-title i {
+    margin-right: 12px;
+    color: #C75B12;
+    font-size: 1.5rem;
+}
+
+/* === SYSTÈME D'ÉTOILES === */
+.star-rating {
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.star-rating input {
+    display: none;
+}
+
+.star-rating label {
+    font-size: 2.5rem;
+    color: #ddd;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.star-rating label:hover,
+.star-rating label.active {
+    color: #C75B12;
+    transform: scale(1.1);
+}
+
+.star-rating label:hover {
+    text-shadow: 0 0 10px rgba(199, 91, 18, 0.5);
+}
+
+/* === AFFICHAGE DES VALEURS === */
+.rating-value {
+    background: #1C1C1C;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: bold;
+    min-width: 60px;
+    text-align: center;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.rating-value.changed {
+    animation: pulse 0.3s ease;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+/* === FORMULAIRES === */
+.form-label {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 12px;
+}
+
+.form-control {
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    padding: 12px 15px;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #C75B12;
+    box-shadow: 0 0 0 0.2rem rgba(199, 91, 18, 0.25);
+}
+
+/* === BOUTONS === */
+.btn-outline-success, .btn-outline-danger {
+    border-width: 2px;
+    border-radius: 10px;
+    padding: 12px 20px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-success:hover, .btn-outline-danger:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.submit-btn {
+    background: linear-gradient(135deg, #C75B12 0%, #a84d0f 100%);
+    color: white;
+    border: none;
+    padding: 15px 40px;
+    border-radius: 25px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    display: block;
+    margin: 30px auto;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(199, 91, 18, 0.3);
+}
+
+.submit-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(199, 91, 18, 0.4);
+}
+
+.submit-btn i {
+    margin-right: 10px;
+}
+
+/* === ALERTES === */
+.alert {
+    border: none;
+    border-radius: 10px;
+    margin: 20px;
+    padding: 15px 20px;
+}
+
+/* === UTILITAIRES === */
+.text-muted {
+    color: #6c757d !important;
+    font-size: 0.9rem;
+}
+
+.d-flex.align-items-center.gap-3 {
+    gap: 15px !important;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+    .page-header h1 {
+        font-size: 1.8rem;
+    }
+
+    .section-card {
+        margin: 15px;
+        padding: 20px;
+    }
+
+    .star-rating label {
+        font-size: 2rem;
+    }
+
+    .form-range::-webkit-slider-thumb {
+        width: 20px;
+        height: 20px;
+    }
+
+    .rating-value {
+        font-size: 0.8rem;
+        padding: 6px 12px;
+    }
+}
+
+/* === STYLES CSS POUR LES ANIMATIONS === */
+.changed {
+    animation: pulse-note 0.3s ease;
+}
+
+.slider-changed {
+    animation: pulse-slider 0.3s ease;
+}
+
+@keyframes pulse-note {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+@keyframes pulse-slider {
+    0% {
+        transform: scaleY(1);
+        filter: brightness(1);
+    }
+    50% {
+        transform: scaleY(1.1);
+        filter: brightness(1.2);
+    }
+    100% {
+        transform: scaleY(1);
+        filter: brightness(1);
+    }
+}
+/* === NOTATION EN BOUTONS DE 1 À 5 (CARRÉS FIXES ET ALIGNÉS) === */
+.rating-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);  /* 5 colonnes fixes */
+    gap: 12px;
+    margin-top: 8px;
+}
+
+/* Boutons radio stylés */
+.rating-grid .rating-btn {
+    width: 100%;
+    height: 48px;
+    padding: 0;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    color: #C75B12;
+    border: 2px solid #C75B12;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+/* Survol */
+.rating-grid .rating-btn:hover {
+    background-color: #C75B12;
+    color: white;
+    transform: scale(1.03);
+}
+
+/* Bouton sélectionné */
+.rating-grid .btn-check:checked + .rating-btn {
+    background-color: #C75B12;
+    color: white;
+    border-color: #C75B12;
+    box-shadow: 0 0 8px rgba(199, 91, 18, 0.4);
+}

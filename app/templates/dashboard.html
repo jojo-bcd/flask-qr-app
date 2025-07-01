@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard Avis Clients</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+
+
+<body>
+
+<!-- navbar.html -->
+<!-- navbar.html -->
+<nav style="
+  background-color: #C75B12;
+  padding: 12px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  border-bottom: 1px solid #b34f10;
+  z-index: 1000;
+">
+  <!-- Logo ou nom -->
+  <div style="color: white; font-weight: bold; font-size: 20px;">
+    <img src="logo.png" style="height: 30px; vertical-align: middle; margin-right: 10px;">
+    Dashboard
+  </div>
+
+  <!-- Liens à droite sous forme de boutons -->
+  <ul style="
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    align-items: center;
+  ">
+    <li style="margin-left: 15px;">
+      <a href="{{ url_for('admin.dashboard') }}" 
+         style="
+           background-color: #ffffff33;
+           color: white;
+           padding: 8px 16px;
+           text-decoration: none;
+           font-weight: bold;
+           border-radius: 4px;
+           transition: background-color 0.3s ease;
+           display: inline-block;
+         "
+         onmouseover="this.style.backgroundColor='#ffffff55'" 
+         onmouseout="this.style.backgroundColor='#ffffff33'">
+        Guest
+      </a>
+    </li>
+
+    <li style="margin-left: 15px;">
+      <a href="{{ url_for('admin.dashboard_event') }}" 
+         style="
+           background-color: #ffffff33;
+           color: white;
+           padding: 8px 16px;
+           text-decoration: none;
+           font-weight: bold;
+           border-radius: 4px;
+           transition: background-color 0.3s ease;
+           display: inline-block;
+         "
+         onmouseover="this.style.backgroundColor='#ffffff55'" 
+         onmouseout="this.style.backgroundColor='#ffffff33'">
+        Event
+      </a>
+    </li>
+
+    <li style="margin-left: 15px;">
+      <a href="#" 
+         style="
+           background-color: #ffffff33;
+           color: white;
+           padding: 8px 16px;
+           text-decoration: none;
+           font-weight: bold;
+           border-radius: 4px;
+           transition: background-color 0.3s ease;
+           display: inline-block;
+         "
+         onmouseover="this.style.backgroundColor='#ffffff55'" 
+         onmouseout="this.style.backgroundColor='#ffffff33'">
+        Restaurant
+      </a>
+    </li>
+
+    <li style="margin-left: 15px;">
+      <a href="{{ url_for('admin.gestion_chambres') }}" 
+         style="
+           background-color: #ffffff33;
+           color: white;
+           padding: 8px 16px;
+           text-decoration: none;
+           font-weight: bold;
+           border-radius: 4px;
+           transition: background-color 0.3s ease;
+           display: inline-block;
+         "
+         onmouseover="this.style.backgroundColor='#ffffff55'" 
+         onmouseout="this.style.backgroundColor='#ffffff33'">
+        Chambre
+      </a>
+    </li>
+
+    {% if session.admin_id %}
+    <li style="margin-left: 15px;">
+      <a href="{{ url_for('admin.logout') }}" 
+         style="
+           background-color: #d11111;
+           color: white;
+           padding: 8px 16px;
+           text-decoration: none;
+           font-weight: bold;
+           border-radius: 4px;
+           transition: background-color 0.3s ease;
+           display: inline-block;
+         "
+         onmouseover="this.style.backgroundColor='#a70f0f'" 
+         onmouseout="this.style.backgroundColor='#d11111'">
+        Déconnexion
+      </a>
+    </li>
+    {% endif %}
+  </ul>
+</nav>
+
+<!-- Marge pour compenser la navbar fixe -->
+<div style="height: 70px;"></div>
+
+
+
+
+
+
+
+
+
+
+  <div class="dashboard-container">
+    <h1>Dashboard Avis Clients</h1>
+
+
+    <!-- Debug Info -->
+    <div class="debug-info" id="debugInfo">
+      <strong>Mode Debug:</strong> Utilisation de données de test
+    </div>
+
+    <!-- Filtres -->
+<!-- Filtres -->
+ 
+<div class="filters">
+  <select id="roomNumberFilter" class="form-select">
+  <option value="">Toutes les chambres</option>
+  {% for chambre in chambres %}
+    <option value="{{ chambre.nom }}">{{ chambre.nom }}</option>
+  {% endfor %}
+</select>
+
+  <input type="date" id="startDate"/>
+  <input type="date" id="endDate"/>
+  <button id="applyFilters">Appliquer</button>
+  <button id="useTestData">Données de test</button>
+</div>
+
+
+    <!-- Statistiques -->
+    <div class="card-container">
+      <div class="card">📝 Avis clients<br><span id="totalAvis">0</span></div>
+      <div class="card">🌟 Notes élevées(4-5)<br><span id="highNotes">0</span></div>
+      <div class="card">⭐️ Notes moyennes(3)<br><span id="midNotes">0</span></div>
+      <div class="card">⚠️ Notes faibles(1-2)<br><span id="lowNotes">0</span></div>
+    </div>
+
+    <!-- Graphiques -->
+    <div class="charts">
+      <div class="chart-box">
+        <h3>Hébergement</h3>
+        <canvas id="hebergementChart"></canvas>
+        <p>Moyenne : <span id="avgHeb">0</span>/5</p>
+      </div>
+      <div class="chart-box">
+        <h3>Restauration</h3>
+        <canvas id="restaurationChart"></canvas>
+        <p>Moyenne : <span id="avgRest">0</span>/5</p>
+      </div>
+    </div>
+
+    <!-- Détails cliquables par note -->
+    <div class="resultats-details mt-5">
+      <h3 id="detailsTitre">Détails des questions notées</h3>
+      <div class="row" id="cardsContainer"></div>
+    </div>
+
+    <!-- Liste des réponses -->
+    <div class="response-section">
+      <h3>Réponses aux questions générales</h3>
+      <ul id="generalResponses"></ul>
+    </div>
+
+    <div class="response-section">
+      <h3>Commentaires généraux</h3>
+      <ul id="commentaires"></ul>
+    </div>
+  </div>
+
+  <!-- JS local -->
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+  <!-- js lien  -->
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+ <!-- MODALE Bootstrap pour les réponses filtrées -->
+<div class="modal fade" id="popupModal" tabindex="-1" aria-labelledby="popupModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="popupModalLabel">Détails des réponses</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Changé l'ID ici pour éviter le conflit -->
+        <div class="row" id="modalCardsContainer"></div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

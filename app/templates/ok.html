@@ -1,0 +1,307 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">Votre Avis Compte</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- CSS local -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    
+    <style>
+        .language-switcher {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+        }
+
+        .lang-btn {
+            background: linear-gradient(45deg, #007bff, #0056b3);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+        }
+
+        .lang-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+        }
+
+        .lang-btn.active {
+            background: linear-gradient(45deg, #28a745, #1e7e34);
+            transform: scale(1.05);
+        }
+
+        .flag {
+            width: 20px;
+            height: 15px;
+            border-radius: 3px;
+            display: inline-block;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .flag.fr {
+            background: linear-gradient(to right, #002395 33%, #ffffff 33%, #ffffff 66%, #ed2939 66%);
+        }
+
+        .flag.en {
+            background: linear-gradient(45deg, #012169 25%, transparent 25%), 
+                       linear-gradient(-45deg, #012169 25%, transparent 25%), 
+                       linear-gradient(45deg, transparent 75%, #012169 75%), 
+                       linear-gradient(-45deg, transparent 75%, #012169 75%);
+            background-size: 8px 8px;
+            background-position: 0 0, 0 4px, 4px -4px, -4px 0px;
+            background-color: #C8102E;
+        }
+
+        .lang-text {
+            transition: opacity 0.2s ease;
+        }
+
+        @media (max-width: 768px) {
+            .language-switcher {
+                position: relative;
+                top: 0;
+                right: 0;
+                justify-content: center;
+                margin-bottom: 20px;
+                margin-top: 10px;
+            }
+            
+            .lang-btn {
+                padding: 8px 15px;
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sélecteur de langue -->
+    <div class="language-switcher">
+        <button class="lang-btn active" onclick="switchLanguage('fr')" id="btn-fr">
+            <span class="flag fr"></span>
+            Français
+        </button>
+        <button class="lang-btn" onclick="switchLanguage('en')" id="btn-en">
+            <span class="flag en"></span>
+            English
+        </button>
+    </div>
+
+    <div class="container">
+        <div class="main-container">
+            <!-- En-tête -->
+            <div class="page-header">
+                <h1><i class="fas fa-star"></i> <span class="lang-text" data-fr="Votre Avis Compte" data-en="Your Account Review">Votre Avis Compte</span></h1>
+            </div>
+
+            <!-- Barre de progression -->
+            <div class="progress-indicator">
+                <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+            </div>
+
+            <!-- Messages flash -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show">
+                    <i class="fas fa-info-circle"></i> {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+              {% endfor %}
+            {% endwith %}
+
+            <form method="POST" id="reviewForm">
+                <!-- Note générale avec étoiles -->
+                <div class="section-card">
+                    <div class="section-title">
+                        <i class="fas fa-star-half-alt"></i>
+                        <span class="lang-text" data-fr="Note générale" data-en="Overall Rating">Note générale</span>
+                    </div>
+                    <div class="star-rating" id="starRating">
+                        {% for i in range(1, 6) %}
+                        <input type="radio" name="note" id="star{{ i }}" value="{{ i }}" required>
+                        <label for="star{{ i }}" class="star"><i class="fas fa-star"></i></label>
+                        {% endfor %}
+                    </div>
+                    <small class="text-muted lang-text" data-fr="Cliquez sur les étoiles pour noter votre expérience" data-en="Click on the stars to rate your experience">Cliquez sur les étoiles pour noter votre expérience</small>
+                </div>
+
+                <div class="row">
+                    <!-- Hébergement -->
+                    <div class="col-lg-6">
+                        <div class="section-card">
+                            <div class="section-title">
+                                <i class="fas fa-home"></i>
+                                <span class="lang-text" data-fr="Services d'hébergement" data-en="Accommodation Services">Services d'hébergement</span>
+                            </div>
+                            {% for question in questions %}
+                                {% if question.categorie == 'hébergement' %}
+                                <div class="mb-4">
+                                    <label class="form-label">{{ question.texte }}</label>
+                                    <div class="d-flex align-items-center gap-3">
+                                        <input type="range" 
+                                               name="reponses[{{ question.id }}]" 
+                                               class="form-range rating-slider" 
+                                               min="1" max="10" value="5" 
+                                               oninput="updateRatingValue(this)" required>
+                                        <span class="rating-value">5/10</span>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Restauration -->
+                    <div class="col-lg-6">
+                        <div class="section-card">
+                            <div class="section-title">
+                                <i class="fas fa-utensils"></i>
+                                <span class="lang-text" data-fr="Services de restauration" data-en="Restaurant Services">Services de restauration</span>
+                            </div>
+                            {% for question in questions %}
+                                {% if question.categorie == 'restauration' %}
+                                <div class="mb-4">
+                                    <label class="form-label">{{ question.texte }}</label>
+                                    <div class="d-flex align-items-center gap-3">
+                                        <input type="range" 
+                                               name="reponses[{{ question.id }}]" 
+                                               class="form-range rating-slider" 
+                                               min="1" max="10" value="5" 
+                                               oninput="updateRatingValue(this)" required>
+                                        <span class="rating-value">5/10</span>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Questions générales -->
+                <div class="section-card">
+                    <div class="section-title">
+                        <i class="fas fa-question-circle"></i>
+                        <span class="lang-text" data-fr="Questions générales" data-en="General Questions">Questions générales</span>
+                    </div>
+                    {% for question in questions %}
+                        {% if question.categorie == 'général' %}
+                        <div class="mb-4">
+                            <label class="form-label">{{ question.texte }}</label>
+
+                            {% if question.type == 'texte' %}
+                            <textarea name="reponses[{{ question.id }}]" 
+                                      class="form-control" 
+                                      rows="4" 
+                                      placeholder="" 
+                                      data-placeholder-fr="Partagez votre expérience..."
+                                      data-placeholder-en="Share your experience..." required></textarea>
+
+                            {% elif question.type == 'oui_non' %}
+                            <div class="btn-group w-100" role="group">
+                                <input type="radio" class="btn-check" name="reponses[{{ question.id }}]" id="oui{{ question.id }}" value="Oui" required>
+                                <label class="btn btn-outline-success" for="oui{{ question.id }}">
+                                    <i class="fas fa-check"></i> <span class="lang-text" data-fr="Oui" data-en="Yes">Oui</span>
+                                </label>
+                                <input type="radio" class="btn-check" name="reponses[{{ question.id }}]" id="non{{ question.id }}" value="Non" required>
+                                <label class="btn btn-outline-danger" for="non{{ question.id }}">
+                                    <i class="fas fa-times"></i> <span class="lang-text" data-fr="Non" data-en="No">Non</span>
+                                </label>
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+                <!-- Commentaire libre -->
+                <div class="section-card">
+                    <div class="section-title">
+                        <i class="fas fa-comment-alt"></i>
+                        <span class="lang-text" data-fr="Commentaire général" data-en="General Comment">Commentaire général</span>
+                    </div>
+                    <textarea name="commentaire" 
+                              class="form-control" 
+                              rows="5" 
+                              placeholder=""
+                              data-placeholder-fr="Dites-nous en plus sur votre séjour... (facultatif)"
+                              data-placeholder-en="Tell us more about your stay... (optional)"></textarea>
+                    <small class="text-muted mt-2 d-block">
+                        <i class="fas fa-info-circle"></i> 
+                        <span class="lang-text" data-fr="Ce commentaire nous aidera à améliorer nos services" data-en="This comment will help us improve our services">Ce commentaire nous aidera à améliorer nos services</span>
+                    </small>
+                </div>
+
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-paper-plane"></i> <span class="lang-text" data-fr="Envoyer mon avis" data-en="Submit my review">Envoyer mon avis</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- JS local -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+ 
+</body>
+</html>
